@@ -1,2 +1,2 @@
-# SQL_AdventureWork_Solutions
+# SQL_AdventureWork_Answers
 The sql code for adventureWork (https://sqlzoo.net/wiki/AdventureWorks)
