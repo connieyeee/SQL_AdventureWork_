@@ -225,17 +225,17 @@ A) From the SalesOrderHeader
 B) Sum of OrderQty*UnitPrice
 C) Sum of OrderQty*ListPrice
 */
-Select SalesOrderHeader.SalesOrderID, SalesOrderHeader.SubTotal as ST1,
-sum(OrderQty*UnitPrice) as ST2, sum(OrderQty * ListPrice) as ST3
-from SalesOrderHeader
-join SalesOrderDetail 
+Select SalesOrderHeader.SalesOrderID, SalesOrderHeader.SubTotal,
+sum(OrderQty*UnitPrice) as DealTotal, sum(OrderQty * ListPrice) as ListTotal
+from SalesOrderDetail 
+join SalesOrderHeader
 on SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
 join Product 
 on SalesOrderDetail.ProductID = Product.ProductID
 group by SalesOrderHeader.SalesOrderID, SalesOrderHeader.SubTotal;
 
 Result:
-SalesOrderID	ST1	ST2	ST3
+SalesOrderID	SubTotal	DealTotal	ListTotal
 71774	880.35	713.8	1189.66
 71776	78.81	63.9	106.5
 71780	38418.69	30600.81	56651.56
@@ -248,7 +248,7 @@ SalesOrderID	ST1	ST2	ST3
 /*
 Show the best selling item by value.
 */
-Select Product.Name,
+Select top 1 Product.Name,
 sum(SalesOrderDetail.OrderQTY * SalesOrderDetail.UnitPrice) as TotalValue
 from Product
 join SalesOrderDetail
