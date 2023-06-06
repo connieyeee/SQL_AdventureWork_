@@ -298,6 +298,48 @@ RANGE	Num orders	Total Value
 /*
 Identify the three most important cities. Show the break down of top level product category against city.
 */
+Select * from
+(select ee.City, dd.ProductCateName, sum(Tot) as total, rank() over (Partition by ee.City order by sum(Tot) desc) as ranknum
+from
 
+(select SalesOrderID, cc.Name ProductCateName, sum(OrderQty*UnitPrice) Tot
+from SalesOrderDetail aa
+join Product bb
+on aa.ProductID = bb.ProductID
+join ProductCategory cc
+on bb.ProductCategoryID = cc.ProductCategoryID
+group by SalesOrderID, cc.Name) dd
 
+join
 
+(select bb.City, SalesOrderID, Subtotal
+from SalesOrderHeader aa
+join Address bb
+on aa.ShipToAddressID = bb.AddressID
+join
+(select top 3 City
+from SalesOrderHeader aa
+join Address bb
+on aa.ShipToAddressID = bb.AddressID
+group by City
+order by sum(SubTotal) desc) cc
+on bb.City = cc.City) ee
+
+on dd.SalesOrderID = ee.SalesOrderID
+group by ee.City, dd.ProductCateName) ddd
+where ranknum = 1
+
+Result:
+City	ProductCateNa..	total	ranknum
+London	Mountain Bikes	50881.99	1
+Union City	Road Bikes	53478.76	1
+Woolston	Touring Bikes	77040.15	1
+
+/*
+Resit Questions
+*/
+
+-- #1
+/*
+List the SalesOrderNumber for the customer 'Good Toys' 'Bike World'
+*/
