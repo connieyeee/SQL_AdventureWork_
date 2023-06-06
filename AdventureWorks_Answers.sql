@@ -208,7 +208,7 @@ on Address.AddressID = CustomerAddress.AddressID
 join Customer
 on CustomerAddress.CustomerID = Customer.CustomerID
 where Address.City = 'Dallas'
-group by Customer.CompanyName
+group by Customer.CompanyName;
 
 Result:
 CompanyName	MainOfficeAdr..	ShippingAddre..
@@ -285,7 +285,7 @@ from (select
       end as range,
       SalesOrderDetail.UnitPrice * SalesOrderDetail.OrderQty AS Total
       from SalesOrderDetail)a
-group by a.range
+group by a.range;
 
 Result:
 RANGE	Num orders	Total Value
@@ -327,7 +327,7 @@ on bb.City = cc.City) ee
 
 on dd.SalesOrderID = ee.SalesOrderID
 group by ee.City, dd.ProductCateName) ddd
-where ranknum = 1
+where ranknum = 1;
 
 Result:
 City	ProductCateNa..	total	ranknum
@@ -343,3 +343,40 @@ Resit Questions
 /*
 List the SalesOrderNumber for the customer 'Good Toys' 'Bike World'
 */
+Select SalesOrderHeader.SalesOrderID, Customer.CompanyName
+from Customer
+left join SalesOrderHeader 
+on Customer.CustomerID = SalesOrderHeader.CustomerID
+where CompanyName like '%Good Toys%'
+   or CompanyName like '%Bike World%';
+  
+Result:
+SalesOrderID	CompanyName
+Bike World
+71774	Good Toys
+
+-- #2
+/*
+List the ProductName and the quantity of what was ordered by 'Futuristic Bikes'
+*/
+Select Product.Name, SalesOrderDetail.OrderQty
+from Customer
+join SalesOrderHeader
+on Customer.CustomerID = SalesOrderHeader.CustomerID
+join SalesOrderDetail
+on SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
+join Product
+on SalesOrderDetail.ProductID = Product.ProductID
+where Customer.CompanyName = 'Futuristic Bikes';
+
+Result:
+Name	OrderQty
+ML Mountain Seat/Saddle	2
+Long-Sleeve Logo Jersey, L	2
+Classic Vest, S	3
+
+-- #3
+/*
+List the name and addresses of companies containing the word 'Bike' (upper or lower case) and companies containing 'cycle' (upper or lower case). Ensure that the 'bike's are listed before the 'cycles's.
+*/
+ 
