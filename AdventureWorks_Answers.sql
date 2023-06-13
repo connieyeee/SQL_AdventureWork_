@@ -40,7 +40,7 @@ Rental Bikes
 /*
 How many items with ListPrice more than $1000 have been sold?
 */
-Select count(*) as Solditem
+Select count(distinct Product.ProductID) as Solditem
 from SalesOrderDetail
 join Product
 on SalesOrderDetail.ProductID = Product.ProductID
@@ -48,7 +48,7 @@ where Product.ListPrice > 1000;
 
 Result:
 Solditem
-131
+41
 
 -- #4
 /*
